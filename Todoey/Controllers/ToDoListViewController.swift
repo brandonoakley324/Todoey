@@ -10,11 +10,31 @@ import UIKit
 
 class ToDoListViewController: UITableViewController {
     
-    var itemArray = ["Gym" , "Hockey" ,"Coding"]
-
+    var itemArray = [Item]()
+    
+    var defaults = UserDefaults.standard
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         // Do any additional setup after loading the view, typically from a nib.
+        
+        if let  items = defaults.array(forKey: "TodoListArray") as? [String] {
+            itemArray = items
+        }
+        
+        
+        let newItem = Item()
+        newItem.title = "Fix teeth"
+        itemArray.append(newItem)
+        
+        let newItem2 = Item()
+        newItem.title = "Get Penuma"
+        itemArray.append(newItem2)
+        
+        let newItem3 = Item()
+        newItem3.title = "Hair Transplant"
+        itemArray.append(newItem3)
+        
         
     }
     
@@ -28,7 +48,8 @@ class ToDoListViewController: UITableViewController {
         
         let cell = tableView.dequeueReusableCell(withIdentifier: "ToDoItemCell", for: indexPath)
         
-        cell.textLabel?.text = itemArray[indexPath.row]
+        cell.textLabel?.text = itemArray[indexPath.row].title
+        
         
         return cell
     }
@@ -62,8 +83,14 @@ class ToDoListViewController: UITableViewController {
         let alert = UIAlertController(title: "Add New Todoey Item", message: "", preferredStyle: .alert)
         
         let action = UIAlertAction(title: "Add Item", style: .default) { (action) in
+            
+            
+            
+            
             // what will happen once the user clicks the add item button on UIAlert
-            self.itemArray.append(textField.text!)
+            //self.itemArray.append(textField.text!)
+            self.defaults.set(self.itemArray, forKey: "ToDoListArray")
+            
             
             self.tableView.reloadData()
         }
